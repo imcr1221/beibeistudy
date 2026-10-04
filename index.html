@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>贝贝学习 · 我的学习空间</title>
+<style>
+:root{
+  --bg1:#eef1ff; --bg2:#f7f4ff; --bg3:#eefaff;
+  --card:#ffffff; --text:#1f2437; --muted:#7c839c;
+  --border:#e3e7f3; --radius:20px;
+  --shadow:0 8px 28px rgba(31,36,55,.07);
+  --shadow-hover:0 16px 40px rgba(31,36,55,.14);
+  --fr:#5b6cff; --fr2:#8b7cff;
+  --en:#00b894; --en2:#55efc4;
+  --sv:#f39c12; --sv2:#ffb35b;
+  --math:#e056fd; --math2:#c56cf0;
+  --zh:#eb4d4b; --zh2:#ff7979;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; min-height:100vh; padding-bottom:60px;
+  font-family:"PingFang SC","Microsoft YaHei",-apple-system,"Segoe UI",Roboto,sans-serif;
+  background:linear-gradient(160deg,var(--bg1) 0%,var(--bg2) 40%,var(--bg3) 100%);
+  color:var(--text);
+}
+h1,h2,h3,p{margin:0;}
+.wrap{max-width:980px;margin:0 auto;padding:32px 20px;}
+
+/* ---------- 顶部 ---------- */
+.hero{text-align:center;margin-bottom:36px;}
+.hero .logo{
+  font-size:44px;line-height:1;margin-bottom:10px;
+  animation:wave 2.6s ease-in-out infinite;
+  display:inline-block;
+}
+@keyframes wave{
+  0%,100%{transform:rotate(0)}
+  15%{transform:rotate(14deg)}
+  30%{transform:rotate(-8deg)}
+  45%{transform:rotate(10deg)}
+  60%{transform:rotate(-4deg)}
+}
+.hero h1{font-size:32px;letter-spacing:1px;}
+.hero .sub{margin-top:10px;color:var(--muted);font-size:15px;}
+.hero .name-tag{
+  display:inline-block;margin-top:14px;padding:6px 18px;border-radius:999px;
+  background:rgba(91,108,255,.12);color:var(--fr);font-size:13px;font-weight:600;
+  letter-spacing:.5px;
+}
+
+/* ---------- 统计 ---------- */
+.stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:14px;margin-bottom:36px;
+}
+.stat{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:18px 16px;text-align:center;box-shadow:var(--shadow);
+}
+.stat .num{font-size:26px;font-weight:700;color:var(--fr);}
+.stat .lbl{font-size:12px;color:var(--muted);margin-top:4px;}
+
+/* ---------- 区块标题 ---------- */
+.section-title{
+  display:flex;align-items:center;gap:10px;
+  font-size:17px;font-weight:700;margin:0 0 16px;
+  padding-left:12px;border-left:4px solid var(--fr);
+}
+.section-title .count{
+  margin-left:auto;font-size:12px;font-weight:500;color:var(--muted);
+}
+
+/* ---------- 科目卡片 ---------- */
+.subject-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:18px;margin-bottom:42px;
+}
+.subject-card{
+  position:relative;overflow:hidden;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:24px 22px 20px;cursor:pointer;text-align:left;
+  font-family:inherit;color:inherit;transition:.25s;
+  box-shadow:var(--shadow);
+}
+.subject-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);}
+.subject-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:5px;
+  background:linear-gradient(90deg,var(--accent1),var(--accent2));
+}
+.subject-card::after{
+  content:'';position:absolute;right:-40px;bottom:-40px;width:140px;height:140px;
+  border-radius:50%;background:var(--accent1);opacity:.06;
+  transition:.3s;
+}
+.subject-card:hover::after{transform:scale(1.25);opacity:.1;}
+.subject-head{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.subject-icon{
+  width:52px;height:52px;border-radius:16px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+  background:linear-gradient(135deg,var(--accent1),var(--accent2));
+  color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.12);
+}
+.subject-name{font-size:19px;font-weight:700;}
+.subject-name-en{font-size:12px;color:var(--muted);margin-top:2px;letter-spacing:.5px;}
+.subject-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px;}
+.subject-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.tag{
+  font-size:11px;padding:4px 10px;border-radius:999px;
+  background:#f4f6fb;color:var(--muted);border:1px solid var(--border);
+}
+.subject-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:16px;padding-top:14px;border-top:1px dashed var(--border);
+}
+.lesson-count{font-size:12px;color:var(--muted);}
+.go-btn{
+  font-size:12px;font-weight:600;color:var(--accent1);
+  display:flex;align-items:center;gap:4px;transition:.2s;
+}
+.subject-card:hover .go-btn{gap:8px;}
+
+/* ---------- 每周进度 ---------- */
+.week-strip{
+  display:flex;gap:10px;overflow-x:auto;padding:4px 2px 12px;
+  margin-bottom:42px;scrollbar-width:thin;
+}
+.week-chip{
+  flex:0 0 auto;padding:10px 18px;border-radius:14px;
+  background:var(--card);border:1px solid var(--border);
+  font-size:13px;color:var(--muted);cursor:pointer;transition:.2s;
+  font-family:inherit;white-space:nowrap;
+}
+.week-chip:hover{border-color:#ccd3ff;color:var(--text);}
+.week-chip.active{
+  background:linear-gradient(135deg,var(--fr),var(--fr2));
+  color:#fff;border-color:transparent;
+  box-shadow:0 6px 18px rgba(91,108,255,.32);
+}
+.week-chip b{font-weight:700;}
+
+/* ---------- 最近材料列表 ---------- */
+.recent-list{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow);
+}
+.recent-item{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  cursor:pointer;transition:.18s;background:transparent;
+  width:100%;font-family:inherit;text-align:left;color:inherit;border-left:none;
+  border-right:none;border-top:none;
+}
+.recent-item:last-child{border-bottom:none;}
+.recent-item:hover{background:#f8f9ff;}
+.recent-icon{
+  width:38px;height:38px;border-radius:11px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  background:#f4f6fb;
+}
+.recent-body{flex:1;min-width:0;}
+.recent-title{font-size:14px;font-weight:600;margin-bottom:2px;}
+.recent-meta{font-size:12px;color:var(--muted);}
+.recent-arrow{color:#c3c9dd;font-size:18px;flex-shrink:0;}
+
+/* ---------- 页脚 ---------- */
+.foot{
+  text-align:center;color:#a2a8c0;font-size:12px;margin-top:46px;
+  line-height:1.9;
+}
+.foot b{color:var(--fr);}
+
+/* ---------- 提示条 ---------- */
+.tip-bar{
+  background:linear-gradient(135deg,rgba(91,108,255,.08),rgba(139,124,255,.08));
+  border:1px solid rgba(91,108,255,.18);
+  border-radius:14px;padding:14px 18px;margin-bottom:32px;
+  font-size:13px;color:#4a5296;line-height:1.7;
+  display:flex;gap:10px;align-items:flex-start;
+}
+.tip-bar .em{font-size:18px;flex-shrink:0;line-height:1.4;}
+
+@media (max-width:560px){
+  .hero h1{font-size:26px;}
+  .hero .logo{font-size:38px;}
+  .subject-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ========== 顶部 ========== -->
+  <header class="hero">
+    <div class="logo">📚</div>
+    <h1>贝贝学习</h1>
+    <p class="sub">每天一点点，进步看得见 ✨</p>
+    <div class="name-tag">👧 贝贝的学习空间</div>
+  </header>
+
+  <!-- ========== 统计 ========== -->
+  <div class="stats">
+    <div class="stat">
+      <div class="num" id="statSubjects">—</div>
+      <div class="lbl">学习科目</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="statLessons">—</div>
+      <div class="lbl">练习材料</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="statWords">—</div>
+      <div class="lbl">累计词条</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="statWeeks">—</div>
+      <div class="lbl">练习周次</div>
+    </div>
+  </div>
+
+  <!-- ========== 提示条 ========== -->
+  <div class="tip-bar">
+    <span class="em">💡</span>
+    <span>点任意科目卡片进入对应练习页；每周新的词汇或材料会自动出现在列表中。法语练习页已按“第 40 周”开始编号，可继续往后添加。</span>
+  </div>
+
+  <!-- ========== 科目 ========== -->
+  <h2 class="section-title">📖 我的科目 <span class="count" id="subjectCount"></span></h2>
+  <div class="subject-grid" id="subjectGrid"></div>
+
+  <!-- ========== 周次快捷入口 ========== -->
+  <h2 class="section-title">🗓️ 法语周次 <span class="count" id="weekCount"></span></h2>
+  <div class="week-strip" id="weekStrip"></div>
+
+  <!-- ========== 最近材料 ========== -->
+  <h2 class="section-title">🕐 最近练习</h2>
+  <div class="recent-list" id="recentList"></div>
+
+  <!-- ========== 页脚 ========== -->
+  <div class="foot">
+    <div>贝贝学习 · 个人学习空间</div>
+    <div>共 <b id="footSubjects">0</b> 个科目 · <b id="footLessons">0</b> 份材料 · 持续更新中</div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   📦 科目与材料数据
+   —— 想加新科目 / 新材料，直接改这里就行
+   ========================================================= */
+const SUBJECTS = [
+  {
+    id: 'french',
+    name: '法语',
+    nameEn: 'Français',
+    icon: '🇫🇷',
+    accent1: '#5b6cff',
+    accent2: '#8b7cff',
+    desc: '单词、句型、动词变位。从自我介绍到日常问候，按周积累。',
+    tags: ['单词', '句型', '发音', '听力'],
+    link: '法语单词练习.html',   // 指向法语练习页，可自行改文件名
+    lessons: [
+      { week: 41, title: 'Les salutations', sub: '问候与礼貌用语', count: 14, link: '法语单词练习.html' },
+      { week: 40, title: "Je m'appelle…",   sub: '自我介绍 + être 动词变位', count: 16, link: '法语单词练习.html' }
+    ]
+  },
+  {
+    id: 'english',
+    name: '英语',
+    nameEn: 'English',
+    icon: '🇬🇧',
+    accent1: '#00b894',
+    accent2: '#55efc4',
+    desc: '基础词汇、日常对话、语法要点。配合听记与朗读，稳步提升。',
+    tags: ['单词', '语法', '口语', '阅读'],
+    link: '#',   // 待补充
+    lessons: [
+      { week: 8, title: 'Daily Routines', sub: '日常活动与时间表达', count: 20, link: '#' },
+      { week: 7, title: 'Family & Friends', sub: '家庭成员与人物关系', count: 18, link: '#' }
+    ]
+  },
+  {
+    id: 'swedish',
+    name: '瑞典语',
+    nameEn: 'Svenska',
+    icon: '🇸🇪',
+    accent1: '#f39c12',
+    accent2: '#ffb35b',
+    desc: '基础问候、数字、常用动词。慢慢来，先从最简单的开始。',
+    tags: ['单词', '问候', '数字', '发音'],
+    link: '#',
+    lessons: [
+      { week: 5, title: 'Hälsningar', sub: '问候与自我介绍', count: 15, link: '#' },
+      { week: 4, title: 'Siffror',    sub: '数字 0–10',       count: 11, link: '#' }
+    ]
+  },
+  {
+    id: 'math',
+    name: '数学',
+    nameEn: 'Math',
+    icon: '🔢',
+    accent1: '#e056fd',
+    accent2: '#c56cf0',
+    desc: '口算、应用题、几何基础。每天 10 分钟，越算越快。',
+    tags: ['口算', '应用题', '几何'],
+    link: '#',
+    lessons: [
+      { week: 3, title: '100 以内加减法', sub: '口算与竖式', count: 30, link: '#' }
+    ]
+  },
+  {
+    id: 'chinese',
+    name: '语文',
+    nameEn: 'Chinese',
+    icon: '📝',
+    accent1: '#eb4d4b',
+    accent2: '#ff7979',
+    desc: '生字词、古诗、阅读理解。每天认几个字，读一小段。',
+    tags: ['生字', '古诗', '阅读'],
+    link: '#',
+    lessons: [
+      { week: 2, title: '古诗背诵', sub: '五首经典古诗', count: 5, link: '#' }
+    ]
+  }
+];
+
+/* 卡片文字颜色（浅色背景上的深色文字） */
+const SOFT_BG = {
+  french:  'linear-gradient(135deg,#eef0ff,#e6e9ff)',
+  english: 'linear-gradient(135deg,#e6fbf5,#dcf9ef)',
+  swedish: 'linear-gradient(135deg,#fff6e8,#ffefd6)',
+  math:    'linear-gradient(135deg,#fbeaff,#f5dcff)',
+  chinese: 'linear-gradient(135deg,#ffeeee,#ffe1e1)'
+};
+
+/* =========================================================
+   渲染
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderSubjects(){
+  const grid = $('#subjectGrid');
+  grid.innerHTML = '';
+
+  SUBJECTS.forEach(sub => {
+    const card = document.createElement('button');
+    card.className = 'subject-card';
+    card.style.setProperty('--accent1', sub.accent1);
+    card.style.setProperty('--accent2', sub.accent2);
+
+    const lessonCount = sub.lessons ? sub.lessons.length : 0;
+    const tagsHtml = (sub.tags || []).map(t =>
+      `<span class="tag">${escapeHtml(t)}</span>`).join('');
+
+    card.innerHTML = `
+      <div class="subject-head">
+        <div class="subject-icon">${sub.icon}</div>
+        <div>
+          <div class="subject-name">${escapeHtml(sub.name)}</div>
+          <div class="subject-name-en">${escapeHtml(sub.nameEn)}</div>
+        </div>
+      </div>
+      <div class="subject-desc">${escapeHtml(sub.desc)}</div>
+      <div class="subject-tags">${tagsHtml}</div>
+      <div class="subject-foot">
+        <span class="lesson-count">${lessonCount} 份材料</span>
+        <span class="go-btn">开始学习 <span>→</span></span>
+      </div>
+    `;
+
+    card.onclick = () => openSubject(sub);
+    grid.appendChild(card);
+  });
+
+  $('#subjectCount').textContent = SUBJECTS.length + ' 个';
+}
+
+function openSubject(sub){
+  if(sub.link && sub.link !== '#'){
+    window.location.href = sub.link;
+  }else{
+    alert(`「${sub.name}」材料还在整理中，敬请期待～\n\n你可以先在代码里的 SUBJECTS 数组中添加材料并填写 link。`);
+  }
+}
+
+/* ---------- 法语周次快捷条 ---------- */
+function renderWeekStrip(){
+  const french = SUBJECTS.find(s => s.id === 'french');
+  const strip = $('#weekStrip');
+  strip.innerHTML = '';
+
+  const lessons = (french && french.lessons) ? french.lessons : [];
+  if(!lessons.length){
+    strip.innerHTML = '<span style="color:#a2a8c0;font-size:13px;">暂无周次</span>';
+    return;
+  }
+
+  const sorted = lessons.slice().sort((a, b) => b.week - a.week);
+  sorted.forEach((l, i) => {
+    const chip = document.createElement('button');
+    chip.className = 'week-chip' + (i === 0 ? ' active' : '');
+    chip.innerHTML = `第 <b>${l.week}</b> 周 · ${escapeHtml(l.title)}`;
+    chip.onclick = () => {
+      $$('.week-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      if(l.link && l.link !== '#') window.location.href = l.link;
+      else alert(`第 ${l.week} 周：${l.title}\n${l.sub}\n材料准备中～`);
+    };
+    strip.appendChild(chip);
+  });
+
+  $('#weekCount').textContent = sorted.length + ' 周';
+}
+
+/* ---------- 最近材料 ---------- */
+function renderRecent(){
+  const list = $('#recentList');
+  list.innerHTML = '';
+
+  // 收集所有科目的材料，按周次倒序
+  const all = [];
+  SUBJECTS.forEach(sub => {
+    (sub.lessons || []).forEach(l => {
+      all.push({ ...l, subject: sub });
+    });
+  });
+  all.sort((a, b) => (b.week || 0) - (a.week || 0));
+
+  if(!all.length){
+    list.innerHTML = '<div style="padding:24px;text-align:center;color:#a2a8c0;font-size:13px;">还没有材料，去添加第一份吧～</div>';
+    return;
+  }
+
+  all.slice(0, 8).forEach(item => {
+    const row = document.createElement('button');
+    row.className = 'recent-item';
+    row.innerHTML = `
+      <div class="recent-icon" style="background:${SOFT_BG[item.subject.id] || '#f4f6fb'}">
+        ${item.subject.icon}
+      </div>
+      <div class="recent-body">
+        <div class="recent-title">${escapeHtml(item.title)}</div>
+        <div class="recent-meta">
+          ${escapeHtml(item.subject.name)} · 第 ${item.week} 周 · ${escapeHtml(item.sub || '')}
+        </div>
+      </div>
+      <span class="recent-arrow">›</span>
+    `;
+    row.onclick = () => {
+      if(item.link && item.link !== '#') window.location.href = item.link;
+      else alert(`${item.subject.name} · 第 ${item.week} 周\n${item.title}\n材料准备中～`);
+    };
+    list.appendChild(row);
+  });
+}
+
+/* ---------- 统计 ---------- */
+function renderStats(){
+  const subjectCount = SUBJECTS.length;
+  let lessonCount = 0;
+  let wordCount = 0;
+  let weekSet = new Set();
+
+  SUBJECTS.forEach(s => {
+    (s.lessons || []).forEach(l => {
+      lessonCount++;
+      if(l.count) wordCount += l.count;
+      if(l.week) weekSet.add(l.week);
+    });
+  });
+
+  $('#statSubjects').textContent = subjectCount;
+  $('#statLessons').textContent  = lessonCount;
+  $('#statWords').textContent    = wordCount;
+  $('#statWeeks').textContent    = weekSet.size;
+
+  $('#footSubjects').textContent = subjectCount;
+  $('#footLessons').textContent  = lessonCount;
+}
+
+/* ---------- 启动 ---------- */
+renderSubjects();
+renderWeekStrip();
+renderRecent();
+renderStats();
+</script>
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>法语单词练习 · Je m'appelle…</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --card:#ffffff; --primary:#5b6cff; --primary-dark:#4453e0;
+    --text:#1f2437; --muted:#7c839c; --border:#e3e7f3; --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh; padding-bottom:40px;
+    font-family:"PingFang SC","Microsoft YaHei",-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:linear-gradient(160deg,#eef1ff 0%,#f7f4ff 40%,#eefaff 100%);
+    color:var(--text);
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:24px 16px;}
+  header h1{font-size:24px;margin:0 0 4px;}
+  header p{margin:0;color:var(--muted);font-size:14px;}
+
+  .tabs{display:flex;gap:8px;margin:20px 0 16px;overflow-x:auto;padding-bottom:4px;}
+  .tab{
+    flex:1 0 auto;padding:10px 14px;border-radius:999px;border:1px solid var(--border);
+    background:#fff;color:var(--muted);font-size:14px;cursor:pointer;
+    transition:.2s;white-space:nowrap;font-family:inherit;
+  }
+  .tab.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 6px 16px rgba(91,108,255,.3);}
+
+  .panel{
+    display:none;background:var(--card);border-radius:var(--radius);padding:22px;
+    box-shadow:0 8px 30px rgba(31,36,55,.07);
+  }
+  .panel.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  [hidden]{display:none !important;}
+
+  /* 按钮 */
+  .btn{
+    font-family:inherit;font-size:14px;padding:10px 16px;border-radius:12px;
+    border:1px solid transparent;cursor:pointer;transition:.18s;font-weight:500;
+  }
+  .btn.primary{background:var(--primary);color:#fff;}
+  .btn.primary:hover{background:var(--primary-dark);}
+  .btn.ghost{background:#f4f6fb;color:var(--text);border-color:var(--border);}
+  .btn.ghost:hover{background:#e9edfa;}
+  .btn.big{font-size:17px;padding:14px 32px;border-radius:14px;}
+  .btn.pill{border-radius:999px;background:#f4f6fb;color:var(--muted);border:1px solid var(--border);}
+  .btn.pill.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+  .row{display:flex;gap:10px;flex-wrap:wrap;}
+  .row.center{justify-content:center;}
+
+  /* 闪卡 */
+  .card{perspective:1200px;cursor:pointer;margin-bottom:18px;}
+  .card-inner{position:relative;height:200px;transform-style:preserve-3d;
+    transition:transform .55s cubic-bezier(.4,.2,.2,1);}
+  .card.flipped .card-inner{transform:rotateY(180deg);}
+  .card-face{
+    position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border-radius:18px;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:10px;padding:20px;text-align:center;
+  }
+  .card-front{background:linear-gradient(135deg,#5b6cff,#8b7cff);color:#fff;}
+  .card-front .fr{font-size:26px;font-weight:600;letter-spacing:.3px;}
+  .card-front .tip{font-size:12px;opacity:.75;}
+  .card-back{background:linear-gradient(135deg,#ffb35b,#ff8a5b);color:#fff;transform:rotateY(180deg);}
+  .card-back .zh{font-size:24px;font-weight:600;}
+
+  /* 输入 */
+  .input{
+    width:100%;padding:14px 16px;border-radius:14px;border:2px solid var(--border);
+    font-size:17px;font-family:inherit;outline:none;transition:.2s;
+    background:#fbfcff;margin:14px 0;color:var(--text);
+  }
+  .input:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 4px rgba(91,108,255,.12);}
+
+  /* 提示 & 反馈 */
+  .prompt{
+    font-size:24px;font-weight:600;text-align:center;padding:24px 12px;
+    background:#f7f8ff;border-radius:14px;margin-bottom:14px;word-break:break-word;
+  }
+  .prompt.small{font-size:18px;padding:18px 12px;}
+  .sub{color:var(--muted);font-size:14px;text-align:center;margin-top:6px;}
+  .feedback{margin-top:14px;padding:12px 14px;border-radius:12px;font-size:15px;display:none;}
+  .feedback.show{display:block;}
+  .feedback.ok{background:#e9fbf0;color:#15803d;border:1px solid #b7f0cd;}
+  .feedback.bad{background:#fef2f2;color:#b91c1c;border:1px solid #fbd5d5;}
+  .feedback.info{background:#eef1ff;color:#3b46a8;border:1px solid #ccd3ff;}
+  .counter{text-align:center;color:var(--muted);font-size:13px;margin-top:14px;}
+
+  /* 喇叭 */
+  .speaker{
+    width:96px;height:96px;border-radius:50%;border:none;cursor:pointer;
+    background:linear-gradient(135deg,#5b6cff,#8b7cff);color:#fff;font-size:36px;
+    display:flex;align-items:center;justify-content:center;margin:0 auto 12px;
+    box-shadow:0 10px 24px rgba(91,108,255,.35);transition:.2s;
+  }
+  .speaker:hover{transform:scale(1.05);}
+  .speaker:active{transform:scale(.95);}
+  .speaker.playing{animation:pulse .6s infinite alternate;}
+  @keyframes pulse{from{box-shadow:0 10px 24px rgba(91,108,255,.35)}to{box-shadow:0 10px 34px rgba(91,108,255,.7)}}
+
+  /* 测验 */
+  .options{display:grid;gap:10px;}
+  .option{
+    padding:14px 16px;border-radius:14px;border:2px solid var(--border);background:#fff;
+    cursor:pointer;font-size:16px;font-family:inherit;text-align:left;transition:.18s;color:var(--text);
+  }
+  .option:hover{border-color:#c3caf0;background:#f8f9ff;}
+  .option.correct{background:#e9fbf0;border-color:#22c55e;color:#15803d;}
+  .option.wrong{background:#fef2f2;border-color:#ef4444;color:#b91c1c;}
+
+  audio{width:100%;margin-top:14px;}
+  .big-score{font-size:44px;font-weight:700;color:var(--primary);text-align:center;margin:10px 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🇫🇷 法语单词练习</h1>
+    <p>Leçon 1 · Je m'appelle… / être —— 16 个词句，五种练法</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="flash">🃏 闪卡</button>
+    <button class="tab" data-tab="listen">🎧 听记</button>
+    <button class="tab" data-tab="translate">🔁 翻译</button>
+    <button class="tab" data-tab="speak">🎙️ 录音</button>
+    <button class="tab" data-tab="quiz">🏆 测验</button>
+  </nav>
+
+  <main>
+    <!-- ========== 闪卡 ========== -->
+    <section class="panel active" id="panel-flash">
+      <div class="card" id="flashCard">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <div class="fr" id="flashFr">je m'appelle</div>
+            <div class="tip">👆 点击卡片翻面看中文</div>
+          </div>
+          <div class="card-face card-back">
+            <div class="zh" id="flashZh">我叫</div>
+          </div>
+        </div>
+      </div>
+      <div class="row center">
+        <button class="btn ghost" id="flashPrev">← 上一个</button>
+        <button class="btn primary" id="flashSpeak">🔊 发音</button>
+        <button class="btn ghost" id="flashNext">下一个 →</button>
+      </div>
+      <div class="counter" id="flashCounter">1 / 16</div>
+    </section>
+
+    <!-- ========== 听记 ========== -->
+    <section class="panel" id="panel-listen">
+      <button class="speaker" id="listenPlay">🔊</button>
+      <div class="sub">点击喇叭听法语，然后在下面写下你听到的内容</div>
+      <input type="text" id="listenInput" class="input" placeholder="在这里输入法语…"
+             autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="row center">
+        <button class="btn primary" id="listenCheck">检查</button>
+        <button class="btn ghost" id="listenSlow">🐢 慢速</button>
+        <button class="btn ghost" id="listenShow">看答案</button>
+        <button class="btn ghost" id="listenNext">下一题 →</button>
+      </div>
+      <div class="feedback" id="listenFeedback"></div>
+      <div class="counter" id="listenCounter"></div>
+    </section>
+
+    <!-- ========== 翻译 ========== -->
+    <section class="panel" id="panel-translate">
+      <div class="row center" style="margin-bottom:14px">
+        <button class="btn pill active" data-dir="fr2zh">法 → 中</button>
+        <button class="btn pill" data-dir="zh2fr">中 → 法</button>
+      </div>
+      <div class="prompt" id="transPrompt">je m'appelle</div>
+      <input type="text" id="transInput" class="input" placeholder="写下译文…"
+             autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="row center">
+        <button class="btn primary" id="transCheck">检查</button>
+        <button class="btn ghost" id="transSpeak">🔊 听法语</button>
+        <button class="btn ghost" id="transShow">看答案</button>
+        <button class="btn ghost" id="transNext">下一题 →</button>
+      </div>
+      <div class="feedback" id="transFeedback"></div>
+      <div class="counter" id="transCounter"></div>
+    </section>
+
+    <!-- ========== 录音 ========== -->
+    <section class="panel" id="panel-speak">
+      <div class="prompt" id="speakFr">je m'appelle</div>
+      <div class="sub" id="speakZh">我叫</div>
+      <div class="row center" style="margin-top:18px">
+        <button class="btn ghost" id="speakDemo">🔊 听示范</button>
+        <button class="btn primary" id="speakRec">🎙️ 开始录音</button>
+        <button class="btn ghost" id="speakNext">下一句 →</button>
+      </div>
+      <audio id="speakPlayback" controls hidden></audio>
+      <div class="feedback info show" id="speakStatus">
+        对着麦克风大声朗读上面的句子，录完可以回放，和示范对比一下～
+      </div>
+      <div class="counter" id="speakCounter"></div>
+    </section>
+
+    <!-- ========== 测验 ========== -->
+    <section class="panel" id="panel-quiz">
+      <div id="quizStart" style="text-align:center">
+        <div class="prompt small">10 道随机选择题<br><span style="font-size:15px;color:#7c839c">法译中 / 中译法 混合出题</span></div>
+        <button class="btn primary big" id="quizBegin">开始测验</button>
+      </div>
+
+      <div id="quizBox" hidden>
+        <div class="counter" id="quizProgress" style="margin-bottom:10px"></div>
+        <div class="prompt" id="quizPrompt"></div>
+        <div class="options" id="quizOptions"></div>
+        <div class="feedback" id="quizFeedback"></div>
+      </div>
+
+      <div id="quizEnd" hidden style="text-align:center">
+        <div class="big-score" id="quizScore">0 / 10</div>
+        <div class="sub" id="quizComment"></div>
+        <div style="margin-top:20px">
+          <button class="btn primary big" id="quizAgain">再来一次</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+/* =========================================================
+   数据
+   ========================================================= */
+const DATA = [
+  { fr:"je m'appelle",                zh:"我叫",              zhAccept:["我叫"] },
+  { fr:"tu t'appelles",               zh:"你叫",              zhAccept:["你叫"] },
+  { fr:"il s'appelle",                zh:"他叫",              zhAccept:["他叫"] },
+  { fr:"elle s'appelle",              zh:"她叫",              zhAccept:["她叫"] },
+  { fr:"Il/elle s'appelle comment ?", zh:"他/她叫什么名字？",
+    zhAccept:["他叫什么名字","她叫什么名字","他/她叫什么名字","他叫什么","她叫什么"],
+    frAccept:["il s'appelle comment","elle s'appelle comment","il/elle s'appelle comment","il elle sappelle comment"] },
+  { fr:"Tu t'appelles comment ?",     zh:"你叫什么名字？",
+    zhAccept:["你叫什么名字","你叫什么"],
+    frAccept:["tu t'appelles comment"] },
+  { fr:"être",                        zh:"是（动词原形）",
+    zhAccept:["是","是动词原形","是（动词原形）","动词原形是"] },
+  { fr:"je suis",                     zh:"我是",              zhAccept:["我是"] },
+  { fr:"tu es",                       zh:"你是",              zhAccept:["你是"] },
+  { fr:"il est",                      zh:"他是",              zhAccept:["他是"] },
+  { fr:"elle est",                    zh:"她是",              zhAccept:["她是"] },
+  { fr:"c'est",                       zh:"这是／那是",
+    zhAccept:["这是","那是","这是那是","这是/那是","这是、那是"] },
+  { fr:"je",                          zh:"我",                zhAccept:["我"] },
+  { fr:"tu",                          zh:"你",                zhAccept:["你"] },
+  { fr:"il",                          zh:"他",                zhAccept:["他"] },
+  { fr:"elle",                        zh:"她",                zhAccept:["她"] },
+];
+
+/* =========================================================
+   工具
+   ========================================================= */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+function shuffle(a){
+  const b = a.slice();
+  for(let i=b.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [b[i],b[j]] = [b[j],b[i]];
+  }
+  return b;
+}
+
+/* 法语答案归一化：忽略大小写、撇号、标点、多余空格 */
+function normFr(s){
+  return String(s).toLowerCase()
+    .replace(/[’‘`´ʼ]/g, "'")
+    .replace(/'/g, '')
+    .replace(/[?!.,;:"«»\/\\]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+/* 中文答案归一化：忽略空格与标点 */
+function normZh(s){
+  return String(s).replace(/[\s\u3000]/g, '')
+    .replace(/[，。！？、；：""''《》〈〉()（）\[\]【】?!.,;:]/g, '')
+    .toLowerCase();
+}
+
+function checkFr(input, item){
+  const u = normFr(input);
+  if(!u) return false;
+  const cands = [item.fr, ...(item.frAccept || [])].map(normFr);
+  return cands.includes(u);
+}
+function checkZh(input, item){
+  const u = normZh(input);
+  if(!u) return false;
+  return item.zhAccept.map(normZh).includes(u);
+}
+
+/* =========================================================
+   语音合成
+   ========================================================= */
+let frVoice = null;
+function pickVoice(){
+  if(!('speechSynthesis' in window)) return;
+  const vs = speechSynthesis.getVoices();
+  frVoice = vs.find(v => /^fr[-_]FR/i.test(v.lang))
+         || vs.find(v => /^fr/i.test(v.lang))
+         || null;
+}
+if('speechSynthesis' in window){
+  pickVoice();
+  speechSynthesis.onvoiceschanged = pickVoice;
+}
+function ttsText(fr){
+  return fr.replace(/Il\/elle/gi, 'Il');
+}
+function speak(text, rate){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(ttsText(text));
+  u.lang = 'fr-FR';
+  u.rate = rate || 0.9;
+  if(frVoice) u.voice = frVoice;
+  speechSynthesis.speak(u);
+}
+
+/* =========================================================
+   标签切换
+   ========================================================= */
+$$('.tab').forEach(tab => {
+  tab.onclick = () => {
+    $$('.tab').forEach(t => t.classList.remove('active'));
+    $$('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    $('#panel-' + tab.dataset.tab).classList.add('active');
+    if(tab.dataset.tab === 'listen'){ $('#listenInput').focus(); }
+    if(tab.dataset.tab === 'translate'){ $('#transInput').focus(); }
+  };
+});
+
+/* =========================================================
+   1. 闪卡
+   ========================================================= */
+let flashIdx = 0;
+const flashCard = $('#flashCard');
+
+function renderFlash(){
+  const d = DATA[flashIdx];
+  $('#flashFr').textContent = d.fr;
+  $('#flashZh').textContent = d.zh;
+  $('#flashCounter').textContent = (flashIdx + 1) + ' / ' + DATA.length;
+  flashCard.classList.remove('flipped');
+}
+flashCard.onclick = () => flashCard.classList.toggle('flipped');
+$('#flashPrev').onclick = () => { flashIdx = (flashIdx - 1 + DATA.length) % DATA.length; renderFlash(); };
+$('#flashNext').onclick = () => { flashIdx = (flashIdx + 1) % DATA.length; renderFlash(); };
+$('#flashSpeak').onclick = () => speak(DATA[flashIdx].fr);
+
+/* =========================================================
+   2. 听记
+   ========================================================= */
+let listenQueue = shuffle(DATA.map((_,i)=>i));
+let listenPos = 0, listenCorrect = 0, listenScored = false, listenTotal = 0;
+
+function renderListen(){
+  const d = DATA[listenQueue[listenPos]];
+  $('#listenInput').value = '';
+  const fb = $('#listenFeedback');
+  fb.className = 'feedback';
+  fb.textContent = '';
+  listenScored = false;
+  updateListenCounter();
+  setTimeout(() => speak(d.fr), 350);
+}
+function updateListenCounter(){
+  $('#listenCounter').textContent =
+    `第 ${listenPos+1} / ${listenQueue.length} 题 · 已答对 ${listenCorrect} / ${listenTotal}`;
+}
+
+$('#listenPlay').onclick = () => {
+  const btn = $('#listenPlay');
+  btn.classList.add('playing');
+  speak(DATA[listenQueue[listenPos]].fr);
+  setTimeout(()=>btn.classList.remove('playing'), 1200);
+};
+$('#listenSlow').onclick = () => speak(DATA[listenQueue[listenPos]].fr, 0.55);
+$('#listenCheck').onclick = doListenCheck;
+$('#listenInput').addEventListener('keydown', e => { if(e.key === 'Enter') doListenCheck(); });
+
+function doListenCheck(){
+  const d = DATA[listenQueue[listenPos]];
+  const val = $('#listenInput').value;
+  if(!val.trim()){ return; }
+  const fb = $('#listenFeedback');
+  if(checkFr(val, d)){
+    fb.className = 'feedback ok show';
+    fb.textContent = '✅ 完全正确！' + d.fr;
+    if(!listenScored){ listenScored = true; listenCorrect++; listenTotal++; }
+  }else{
+    fb.className = 'feedback bad show';
+    fb.textContent = '❌ 再听一遍试试～';
+    if(!listenScored){ listenScored = true; listenTotal++; }
+  }
+  updateListenCounter();
+}
+
+$('#listenShow').onclick = () => {
+  const d = DATA[listenQueue[listenPos]];
+  const fb = $('#listenFeedback');
+  fb.className = 'feedback info show';
+  fb.textContent = '📖 正确答案：' + d.fr + '　（' + d.zh + '）';
+};
+
+$('#listenNext').onclick = () => {
+  listenPos++;
+  if(listenPos >= listenQueue.length){
+    if(listenTotal > 0){
+      alert(`🎉 本轮结束！\n答对 ${listenCorrect} / ${listenTotal} 题`);
+    }
+    listenQueue = shuffle(DATA.map((_,i)=>i));
+    listenPos = 0;
+    listenCorrect = 0;
+    listenTotal = 0;
+  }
+  renderListen();
+  $('#listenInput').focus();
+};
+
+/* =========================================================
+   3. 翻译
+   ========================================================= */
+let transDir = 'fr2zh';
+let transQueue = shuffle(DATA.map((_,i)=>i));
+let transPos = 0, transCorrect = 0, transTotal = 0, transScored = false;
+
+$$('[data-dir]').forEach(b => {
+  b.onclick = () => {
+    $$('[data-dir]').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    transDir = b.dataset.dir;
+    renderTrans();
+    $('#transInput').focus();
+  };
+});
+
+function renderTrans(){
+  const d = DATA[transQueue[transPos]];
+  const p = $('#transPrompt');
+  p.textContent = transDir === 'fr2zh' ? d.fr : d.zh;
+  p.classList.toggle('small', transDir === 'zh2fr');
+  $('#transInput').value = '';
+  $('#transInput').placeholder = transDir === 'fr2zh' ? '写下中文意思…' : '写出法语…';
+  const fb = $('#transFeedback');
+  fb.className = 'feedback';
+  fb.textContent = '';
+  transScored = false;
+  $('#transCounter').textContent =
+    `第 ${transPos+1} / ${transQueue.length} 题 · 答对 ${transCorrect} / ${transTotal}`;
+}
+
+$('#transCheck').onclick = doTransCheck;
+$('#transInput').addEventListener('keydown', e => { if(e.key === 'Enter') doTransCheck(); });
+
+function doTransCheck(){
+  const d = DATA[transQueue[transPos]];
+  const val = $('#transInput').value;
+  if(!val.trim()) return;
+  const ok = transDir === 'fr2zh' ? checkZh(val, d) : checkFr(val, d);
+  const fb = $('#transFeedback');
+  if(ok){
+    fb.className = 'feedback ok show';
+    fb.textContent = '✅ 正确！' + d.fr + ' = ' + d.zh;
+    if(!transScored){ transScored = true; transCorrect++; transTotal++; }
+  }else{
+    fb.className = 'feedback bad show';
+    fb.textContent = '❌ 还差一点，再想想～';
+    if(!transScored){ transScored = true; transTotal++; }
+  }
+  $('#transCounter').textContent =
+    `第 ${transPos+1} / ${transQueue.length} 题 · 答对 ${transCorrect} / ${transTotal}`;
+}
+
+$('#transSpeak').onclick = () => speak(DATA[transQueue[transPos]].fr);
+$('#transShow').onclick = () => {
+  const d = DATA[transQueue[transPos]];
+  const fb = $('#transFeedback');
+  fb.className = 'feedback info show';
+  fb.textContent = '📖 答案：' + d.fr + '　=　' + d.zh;
+};
+
+$('#transNext').onclick = () => {
+  transPos++;
+  if(transPos >= transQueue.length){
+    if(transTotal > 0) alert(`🎉 本轮结束！\n答对 ${transCorrect} / ${transTotal} 题`);
+    transQueue = shuffle(DATA.map((_,i)=>i));
+    transPos = 0; transCorrect = 0; transTotal = 0;
+  }
+  renderTrans();
+  $('#transInput').focus();
+};
+
+/* =========================================================
+   4. 录音
+   ========================================================= */
+let speakIdx = 0;
+let rec = { recorder:null, chunks:[], stream:null, recording:false };
+
+function renderSpeak(){
+  const d = DATA[speakIdx];
+  $('#speakFr').textContent = d.fr;
+  $('#speakZh').textContent = d.zh;
+  $('#speakCounter').textContent = (speakIdx + 1) + ' / ' + DATA.length;
+  const p = $('#speakPlayback');
+  p.hidden = true; p.src = '';
+  $('#speakStatus').className = 'feedback info show';
+  $('#speakStatus').textContent = '对着麦克风大声朗读上面的句子，录完可以回放，和示范对比一下～';
+  $('#speakRec').textContent = '🎙️ 开始录音';
+  rec.recording = false;
+}
+
+$('#speakDemo').onclick = () => speak(DATA[speakIdx].fr, 0.85);
+
+$('#speakRec').onclick = async () => {
+  const status = $('#speakStatus');
+  if(rec.recording){
+    rec.recorder.stop();
+    rec.recording = false;
+    $('#speakRec').textContent = '🎙️ 重新录音';
+    status.className = 'feedback info show';
+    status.textContent = '✅ 录制完成，点上面的播放器回放，和示范对比一下～';
+    return;
+  }
+  if(!navigator.mediaDevices || !window.MediaRecorder){
+    status.className = 'feedback bad show';
+    status.textContent = '⚠️ 当前浏览器不支持录音（需要 HTTPS 或 localhost 环境）。';
+    return;
+  }
+  try{
+    rec.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  }catch(e){
+    status.className = 'feedback bad show';
+    status.textContent = '⚠️ 无法访问麦克风：' + e.message;
+    return;
+  }
+  rec.chunks = [];
+  rec.recorder = new MediaRecorder(rec.stream);
+  rec.recorder.ondataavailable = e => { if(e.data.size) rec.chunks.push(e.data); };
+  rec.recorder.onstop = () => {
+    const blob = new Blob(rec.chunks, { type: rec.recorder.mimeType || 'audio/webm' });
+    const url = URL.createObjectURL(blob);
+    const p = $('#speakPlayback');
+    p.src = url;
+    p.hidden = false;
+    rec.stream.getTracks().forEach(t => t.stop());
+  };
+  rec.recorder.start();
+  rec.recording = true;
+  $('#speakRec').textContent = '⏹ 停止录音';
+  status.className = 'feedback bad show';
+  status.textContent = '🔴 正在录音…请大声朗读！';
+};
+
+$('#speakNext').onclick = () => {
+  if(rec.recording && rec.recorder){ rec.recorder.stop(); rec.recording = false; }
+  speakIdx = (speakIdx + 1) % DATA.length;
+  renderSpeak();
+};
+
+/* =========================================================
+   5. 测验
+   ========================================================= */
+let quiz = { qs: [], i: 0, score: 0, answered: false };
+
+function pickIndices(n){
+  const out = [];
+  while(out.length < n){
+    for(const i of shuffle(DATA.map((_,k)=>k))){
+      if(out.length >= n) break;
+      out.push(i);
+    }
+  }
+  return out;
+}
+
+function startQuiz(){
+  const picked = pickIndices(10);
+  quiz.qs = picked.map(idx => {
+    const dir = Math.random() < 0.5 ? 'fr2zh' : 'zh2fr';
+    const others = shuffle(DATA.map((_,k)=>k).filter(k => k !== idx)).slice(0, 3);
+    return { idx, dir, opts: shuffle([idx, ...others]) };
+  });
+  quiz.i = 0; quiz.score = 0; quiz.answered = false;
+  $('#quizStart').hidden = true;
+  $('#quizEnd').hidden = true;
+  $('#quizBox').hidden = false;
+  renderQuiz();
+}
+
+function renderQuiz(){
+  const q = quiz.qs[quiz.i];
+  $('#quizProgress').textContent =
+    `第 ${quiz.i+1} / ${quiz.qs.length} 题 · 得分 ${quiz.score}`;
+  $('#quizPrompt').textContent = q.dir === 'fr2zh' ? DATA[q.idx].fr : DATA[q.idx].zh;
+  $('#quizPrompt').classList.toggle('small', q.dir === 'zh2fr');
+
+  const box = $('#quizOptions');
+  box.innerHTML = '';
+  q.opts.forEach(optIdx => {
+    const b = document.createElement('button');
+    b.className = 'option';
+    b.textContent = q.dir === 'fr2zh' ? DATA[optIdx].zh : DATA[optIdx].fr;
+    b.onclick = () => answerQuiz(optIdx);
+    box.appendChild(b);
+  });
+
+  const fb = $('#quizFeedback');
+  fb.className = 'feedback';
+  fb.textContent = '';
+  quiz.answered = false;
+}
+
+function answerQuiz(chosen){
+  if(quiz.answered) return;
+  quiz.answered = true;
+  const q = quiz.qs[quiz.i];
+  const btns = $$('#quizOptions .option');
+  const fb = $('#quizFeedback');
+
+  q.opts.forEach((optIdx, pos) => {
+    if(optIdx === q.idx) btns[pos].classList.add('correct');
+  });
+
+  if(chosen === q.idx){
+    quiz.score++;
+    fb.className = 'feedback ok show';
+    fb.textContent = '✅ 正确！';
+  }else{
+    const pos = q.opts.indexOf(chosen);
+    if(pos >= 0) btns[pos].classList.add('wrong');
+    fb.className = 'feedback bad show';
+    fb.textContent = '❌ 正确答案：' +
+      (q.dir === 'fr2zh' ? DATA[q.idx].zh : DATA[q.idx].fr);
+  }
+  $('#quizProgress').textContent =
+    `第 ${quiz.i+1} / ${quiz.qs.length} 题 · 得分 ${quiz.score}`;
+
+  setTimeout(() => {
+    quiz.i++;
+    if(quiz.i >= quiz.qs.length) endQuiz();
+    else renderQuiz();
+  }, 1100);
+}
+
+function endQuiz(){
+  $('#quizBox').hidden = true;
+  $('#quizEnd').hidden = false;
+  const total = quiz.qs.length;
+  $('#quizScore').textContent = quiz.score + ' / ' + total;
+  const rate = quiz.score / total;
+  let msg = '继续加油，多练几遍就熟啦！';
+  if(rate === 1) msg = '🏅 满分！Très bien ! 你太厉害了！';
+  else if(rate >= 0.8) msg = '👏 很棒！Bravo ! 再巩固一下就更完美了。';
+  else if(rate >= 0.6) msg = '👍 不错哦，再把错题过一遍吧。';
+  $('#quizComment').textContent = msg;
+}
+
+$('#quizBegin').onclick = startQuiz;
+$('#quizAgain').onclick = startQuiz;
+
+/* =========================================================
+   初始化
+   ========================================================= */
+renderFlash();
+renderListen();
+renderTrans();
+renderSpeak();
+</script>
+</body>
+</html>
