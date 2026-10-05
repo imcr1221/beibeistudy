@@ -116,7 +116,7 @@ function dictCheck(inputId,ans,feedId){let v=document.getElementById(inputId).va
 function gapCheck(inputId,ans,feedId){let v=document.getElementById(inputId).value,f=document.getElementById(feedId),ok=norm(v)===norm(ans);f.textContent=ok?'✓ 正确！':'✗ 再听一遍';f.className='feedback '+(ok?'good':'bad')}
 buildDict();
 
-const transShort=[
+const transShortItems=[
   ['jag heter',`je m'appelle`],
   ['du heter',`tu t'appelles`],
   ['han heter',`il s'appelle`],
@@ -134,7 +134,7 @@ const transShort=[
   ['han','il'],
   ['hon','elle']
 ];
-const transSentence=[
+const transSentenceItems=[
   ['Vad heter du?',`Tu t'appelles comment ?`],
   ['Jag heter Emma.',`Je m'appelle Emma.`],
   ['Han heter Lucas.',`Il s'appelle Lucas.`],
@@ -145,8 +145,8 @@ const transSentence=[
   ['Hon är fransk.','Elle est française.']
 ];
 function buildTranslation(){
- transShort.innerHTML=transShort.map((x,i)=>`<div class="exercise"><p>${i+1}. 🇸🇪 <b>${x[0]}</b></p><input id="ts${i}" class="input" placeholder="Skriv på franska..."><br><button class="btn primary" onclick="transCheck('ts${i}','${esc(x[1])}','tsf${i}')">检查</button><span id="tsf${i}" class="feedback"></span></div>`).join('');
- transSentence.innerHTML=transSentence.map((x,i)=>`<div class="exercise"><p>${i+1}. 🇸🇪 <b>${x[0]}</b></p><input id="tse${i}" class="input" placeholder="Écris la phrase en français..."><br><button class="btn primary" onclick="transCheck('tse${i}','${esc(x[1])}','tsef${i}')">检查</button><span id="tsef${i}" class="feedback"></span></div>`).join('');
+ document.getElementById('transShort').innerHTML=transShortItems.map((x,i)=>`<div class="exercise"><p>${i+1}. 🇸🇪 <b>${x[0]}</b></p><input id="ts${i}" class="input" placeholder="Skriv på franska..."><br><button class="btn primary" onclick="transCheck('ts${i}','${esc(x[1])}','tsf${i}')">检查</button><span id="tsf${i}" class="feedback"></span></div>`).join('');
+ document.getElementById('transSentence').innerHTML=transSentenceItems.map((x,i)=>`<div class="exercise"><p>${i+1}. 🇸🇪 <b>${x[0]}</b></p><input id="tse${i}" class="input" placeholder="Écris la phrase en français..."><br><button class="btn primary" onclick="transCheck('tse${i}','${esc(x[1])}','tsef${i}')">检查</button><span id="tsef${i}" class="feedback"></span></div>`).join('');
 }
 function transCheck(inputId,ans,feedId){let v=document.getElementById(inputId).value,f=document.getElementById(feedId),answers=ans.split('||'),ok=answers.some(a=>norm(v)===norm(a));f.textContent=ok?'✓ Très bien !':'✗ 再想一想。参考答案：'+answers.join(' / ');f.className='feedback '+(ok?'good':'bad')}
 buildTranslation();
