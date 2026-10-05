@@ -28,8 +28,8 @@ footer{text-align:center;color:#8492ad;font-size:12px;padding:24px}
 <header class="top"><div class="brand">🇫🇷 Français · 第40周</div><a class="back" href="index.html">← 返回法语目录</a></header>
 <main class="wrap">
 <section class="hero"><div class="flag">FRANÇAIS · SEMAINE 40</div><h1>Bonjour ! 👋</h1><p>认识“我、你、他、她” · 学会介绍名字 · 练习 être<br>这一周，我们用听、说、读、写把学校的法语单词真正学会。</p><div class="hero-icons">🎧 🗣️</div></section>
-<div class="progress"><div class="ph"><span>🌱 本周学习进度</span><span id="pt">0 / 5</span></div><div class="track"><span class="fill" id="bar"></span></div></div>
-<nav class="tabs"><button class="tab active" data-tab="learn">📖 学习</button><button class="tab" data-tab="listenPage">🎧 听力</button><button class="tab" data-tab="speakPage">🎙️ 口语</button><button class="tab" data-tab="writePage">✍️ 读写</button><button class="tab" data-tab="challenge">🏆 闯关</button></nav>
+<div class="progress"><div class="ph"><span>🌱 本周学习进度</span><span id="pt">0 / 6</span></div><div class="track"><span class="fill" id="bar"></span></div></div>
+<nav class="tabs"><button class="tab active" data-tab="learn">📖 学习</button><button class="tab" data-tab="listenPage">🎧 听力</button><button class="tab" data-tab="speakPage">🎙️ 口语</button><button class="tab" data-tab="writePage">✍️ 读写</button><button class="tab" data-tab="translatePage">🇸🇪→🇫🇷 翻译</button><button class="tab" data-tab="challenge">🏆 闯关</button></nav>
 
 <section class="page" id="learn"><h2>📖 先认识四个人称</h2><p class="lead">看到 je / tu / il / elle 时，先想一想：现在说的是“谁”？</p>
 <div class="people">
@@ -81,10 +81,19 @@ footer{text-align:center;color:#8492ad;font-size:12px;padding:24px}
 <div class="exercise"><p>5. 自己写两句话：介绍自己，再介绍一个“他”或“她”。</p><textarea class="input" style="min-height:95px" placeholder="Je m’appelle ...&#10;Elle s’appelle ..."></textarea><p class="note">开放题不自动评分。写完自己检查 je / il / elle 和 s’appelle。</p></div>
 <div class="complete"><span>读写练习完成了吗？</span><button onclick="done('writePage')">✓ 完成读写</button></div></section>
 
+<section class="page hidden" id="translatePage"><h2>🇸🇪 → 🇫🇷 瑞典语翻译成法语</h2><p class="lead">只看瑞典语，自己回忆并写出法语。不要先回学习页找答案 😊</p>
+<div class="section blue"><h3>🌱 A. 单词和短语</h3><p class="note">先从本周最重要的词和短语开始。</p><div id="transShort"></div></div>
+<div class="section yellow"><h3>✍️ B. 完整句子</h3><p class="note">把整个瑞典语句子翻译成法语，注意人称和动词形式。</p><div id="transSentence"></div></div>
+<div class="section purple"><h3>⭐ C. 小挑战</h3>
+<div class="exercise"><p>1. 瑞典语：<b>Vad heter hon?</b></p><input id="tc1" class="input" placeholder="Écris en français..."><br><button class="btn primary" onclick="transCheck('tc1',`Elle s'appelle comment ?`,'tcf1')">检查</button><span id="tcf1" class="feedback"></span></div>
+<div class="exercise"><p>2. 瑞典语：<b>Jag heter Elsa.</b></p><input id="tc2" class="input" placeholder="Écris en français..."><br><button class="btn primary" onclick="transCheck('tc2',`Je m'appelle Elsa.`,'tcf2')">检查</button><span id="tcf2" class="feedback"></span></div>
+<div class="exercise"><p>3. 瑞典语：<b>Hon är fransk.</b></p><input id="tc3" class="input" placeholder="Écris en français..."><br><button class="btn primary" onclick="transCheck('tc3',`Elle est française.`,'tcf3')">检查</button><span id="tcf3" class="feedback"></span></div>
+</div><div class="complete"><span>瑞典语 → 法语的单词和句子都写过了吗？</span><button onclick="done('translatePage')">✓ 完成翻译</button></div></section>
+
 <section class="page hidden" id="challenge"><h2>🏆 本周闯关</h2><p class="lead">不翻前面的知识卡，看看你能拿几分。</p><div id="qs"></div><button class="btn primary" onclick="grade()">提交闯关</button><span class="score" id="score"></span><p id="result"></p><div class="complete"><span>完成闯关，本周法语训练就完成啦。</span><button onclick="done('challenge')">✓ 完成闯关</button></div></section>
 </main><footer>🇫🇷 Français · Semaine 40 · Écouter · Parler · Lire · Écrire</footer>
 <script>
-const KEY='fr40-color',parts=['learn','listenPage','speakPage','writePage','challenge'];let state=JSON.parse(localStorage.getItem(KEY)||'{"done":[]}');
+const KEY='fr40-color',parts=['learn','listenPage','speakPage','writePage','translatePage','challenge'];let state=JSON.parse(localStorage.getItem(KEY)||'{"done":[]}');
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));document.getElementById(b.dataset.tab).classList.remove('hidden')});
 function say(t){if(!speechSynthesis){alert('浏览器不支持语音播放');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='fr-FR';u.rate=.76;let v=speechSynthesis.getVoices().find(x=>x.lang&&x.lang.toLowerCase().startsWith('fr'));if(v)u.voice=v;speechSynthesis.speak(u)}
 function radio(n,a,id){let x=document.querySelector(`input[name="${n}"]:checked`),f=document.getElementById(id);if(!x){f.textContent='请先选择';f.className='feedback bad';return}let ok=+x.value===a;f.textContent=ok?'✓ 正确！':'✗ 再想一想';f.className='feedback '+(ok?'good':'bad')}
@@ -106,10 +115,32 @@ function buildDict(){
 function dictCheck(inputId,ans,feedId){let v=document.getElementById(inputId).value,f=document.getElementById(feedId),ok=norm(v)===norm(ans);f.textContent=ok?'✓ Très bien ! 听写正确！':'✗ 再听一遍试试';f.className='feedback '+(ok?'good':'bad')}
 function gapCheck(inputId,ans,feedId){let v=document.getElementById(inputId).value,f=document.getElementById(feedId),ok=norm(v)===norm(ans);f.textContent=ok?'✓ 正确！':'✗ 再听一遍';f.className='feedback '+(ok?'good':'bad')}
 buildDict();
+
+const transShort=[
+  ['jag','je'],['du','tu'],['han','il'],['hon','elle'],['att vara','être'],
+  ['jag är','je suis'],['du är','tu es'],['han är','il est'],['hon är','elle est'],
+  ['jag heter',`je m'appelle`],['du heter',`tu t'appelles`],['han heter',`il s'appelle`],['hon heter',`elle s'appelle`]
+];
+const transSentence=[
+  ['Vad heter du?',`Tu t'appelles comment ?`],
+  ['Jag heter Emma.',`Je m'appelle Emma.`],
+  ['Han heter Lucas.',`Il s'appelle Lucas.`],
+  ['Hon heter Emma.',`Elle s'appelle Emma.`],
+  ['Jag är Elsa.','Je suis Elsa.'],
+  ['Du är Lucas.','Tu es Lucas.'],
+  ['Han är fransk.','Il est français.'],
+  ['Hon är fransk.','Elle est française.']
+];
+function buildTranslation(){
+ transShort.innerHTML=transShort.map((x,i)=>`<div class="exercise"><p>${i+1}. 🇸🇪 <b>${x[0]}</b></p><input id="ts${i}" class="input" placeholder="Skriv på franska..."><br><button class="btn primary" onclick="transCheck('ts${i}','${esc(x[1])}','tsf${i}')">检查</button><span id="tsf${i}" class="feedback"></span></div>`).join('');
+ transSentence.innerHTML=transSentence.map((x,i)=>`<div class="exercise"><p>${i+1}. 🇸🇪 <b>${x[0]}</b></p><input id="tse${i}" class="input" placeholder="Écris la phrase en français..."><br><button class="btn primary" onclick="transCheck('tse${i}','${esc(x[1])}','tsef${i}')">检查</button><span id="tsef${i}" class="feedback"></span></div>`).join('');
+}
+function transCheck(inputId,ans,feedId){let v=document.getElementById(inputId).value,f=document.getElementById(feedId),ok=norm(v)===norm(ans);f.textContent=ok?'✓ Très bien !':'✗ 再想一想。参考答案：'+ans;f.className='feedback '+(ok?'good':'bad')}
+buildTranslation();
 function translation(){let ok=norm(tr.value)==="tu t'appelles comment";wf3.textContent=ok?'✓ 正确！':"参考：Tu t’appelles comment ?";wf3.className='feedback '+(ok?'good':'bad')}
 function cnCheck(){let v=cn.value.trim(),ok=v.includes('他')&&v.includes('叫')&&v.toLowerCase().includes('lucas');wf4.textContent=ok?'✓ 很好！':'参考：他叫 Lucas。';wf4.className='feedback '+(ok?'good':'bad')}
 function done(p){if(!state.done.includes(p))state.done.push(p);localStorage.setItem(KEY,JSON.stringify(state));progress()}
-function progress(){pt.textContent=`${state.done.length} / 5`;bar.style.width=(state.done.length/5*100)+'%'}progress();
+function progress(){pt.textContent=`${state.done.length} / 6`;bar.style.width=(state.done.length/6*100)+'%'}progress();
 const Q=[['“她”是哪一个？',['je','il','elle'],2],['je + être',['je suis','je es','je est'],0],['“你叫什么名字？”',['Tu t’appelles comment ?','Il s’appelle comment ?','Je suis comment ?'],0],['Lucas 是男孩。',['Elle s’appelle Lucas.','Il s’appelle Lucas.','Tu s’appelle Lucas.'],1],['tu + être',['tu suis','tu es','tu est'],1]];
 qs.innerHTML=Q.map((q,j)=>`<div class="exercise"><p>${j+1}. ${q[0]}</p><div class="options">${q[1].map((o,i)=>`<label class="option"><input type="radio" name="q${j}" value="${i}"> ${o}</label>`).join('')}</div></div>`).join('');
 function grade(){let n=0,a=0;Q.forEach((q,i)=>{let x=document.querySelector(`input[name=q${i}]:checked`);if(x){a++;if(+x.value===q[2])n++}});if(a<5){result.textContent=`还有 ${5-a} 题没有完成。`;score.textContent='';return}score.textContent=n+'/5';result.textContent=n===5?'🎉 Très bien ! 全部正确！':'可以回到学习页复习，再挑战一次。'}
