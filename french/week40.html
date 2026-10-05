@@ -54,17 +54,22 @@ footer{text-align:center;color:#8492ad;font-size:12px;padding:24px}
 <div class="dialog"><b>💬 Mini dialogue</b><br><small>点击句子也可以听示范</small><br>— <span onclick="say('Tu t’appelles comment ?')">Tu t’appelles comment ? 🔊</span><br>— <span onclick="say('Je m’appelle Emma.')">Je m’appelle Emma. 🔊</span><br><br>— <span onclick="say('Il s’appelle comment ?')">Il s’appelle comment ? 🔊</span><br>— <span onclick="say('Il s’appelle Lucas.')">Il s’appelle Lucas. 🔊</span></div>
 <div class="complete"><span>四个人称、s’appeler 和 être 都看过并听过了吗？</span><button onclick="done('learn')">✓ 完成学习</button></div></section>
 
-<section class="page hidden" id="listenPage"><h2>🎧 听力训练</h2><p class="lead">先不要看学习页。听一听，再判断你听到了什么。</p>
-<div class="listenhero"><div class="icon">🎧</div><b>听力 1</b><br><button class="btn listen" onclick="say('Je m’appelle Emma.')">▶ 播放法语</button></div>
-<div class="exercise"><p>你听到的是：</p><div class="options"><label class="option"><input type="radio" name="l1" value="0"> Tu t’appelles Emma.</label><label class="option"><input type="radio" name="l1" value="1"> Je m’appelle Emma.</label><label class="option"><input type="radio" name="l1" value="2"> Elle est Emma.</label></div><button class="btn primary" onclick="radio('l1',1,'f1')">检查答案</button><span id="f1" class="feedback"></span></div>
-<div class="listenhero"><div class="icon">✍️🎧</div><b>听力 2 · 听写</b><br><button class="btn listen" onclick="say('Tu t’appelles comment ?')">▶ 播放法语</button></div>
-<div class="exercise"><p>把听到的句子写下来：</p><input id="dict" class="input" placeholder="Écris ici..."><br><button class="btn primary" onclick="textCheck()">检查听写</button><span id="f2" class="feedback"></span></div>
-<div class="listenhero"><div class="icon">👂</div><b>听力 3</b><br><button class="btn listen" onclick="say('Elle est française.')">▶ 播放法语</button></div>
-<div class="exercise"><p>句子的主语是谁？</p><div class="options"><label class="option"><input type="radio" name="l3" value="0"> je</label><label class="option"><input type="radio" name="l3" value="1"> il</label><label class="option"><input type="radio" name="l3" value="2"> elle</label></div><button class="btn primary" onclick="radio('l3',2,'f3')">检查答案</button><span id="f3" class="feedback"></span></div>
-<div class="complete"><span>三组听力都做完了吗？</span><button onclick="done('listenPage')">✓ 完成听力</button></div></section>
+<section class="page hidden" id="listenPage"><h2>🎧 听力 + 听写训练</h2><p class="lead">尽量不要回到学习页偷看答案 😊 每题可以反复听。先听懂，再把听到的法语写下来。</p>
+<div class="section blue"><h3>👂 A. 听音选答案</h3><p class="note">先从比较容易的开始：听句子，判断你听到了什么。</p>
+<div class="exercise"><p>1. 🔊 听一听，选择正确的句子。</p><button class="btn listen" onclick="say('Je m’appelle Emma.')">▶ 播放</button><div class="options" style="margin-top:10px"><label class="option"><input type="radio" name="l1" value="0"> Tu t’appelles Emma.</label><label class="option"><input type="radio" name="l1" value="1"> Je m’appelle Emma.</label><label class="option"><input type="radio" name="l1" value="2"> Elle est Emma.</label></div><button class="btn primary" onclick="radio('l1',1,'f1')">检查答案</button><span id="f1" class="feedback"></span></div>
+<div class="exercise"><p>2. 🔊 听一听，句子的主语是谁？</p><button class="btn listen" onclick="say('Elle est française.')">▶ 播放</button><div class="options" style="margin-top:10px"><label class="option"><input type="radio" name="l2" value="0"> je</label><label class="option"><input type="radio" name="l2" value="1"> il</label><label class="option"><input type="radio" name="l2" value="2"> elle</label></div><button class="btn primary" onclick="radio('l2',2,'f3')">检查答案</button><span id="f3" class="feedback"></span></div></div>
+<div class="section mint"><h3>✍️ B. 单词 / 短语听写</h3><p class="note">点击播放后，把听到的法语写下来。不要先看学习页。</p>
+<div id="dictShort"></div></div>
+<div class="section yellow"><h3>🎧✍️ C. 整句听写</h3><p class="note">难度升级：这次要把整个句子写下来。可以多听几遍。</p><div id="dictSentence"></div></div>
+<div class="section purple"><h3>🧩 D. 听句子，补上缺少的部分</h3>
+<div class="exercise"><p>1. 🔊 <b>Je ______ Emma.</b></p><button class="btn listen" onclick="say('Je m’appelle Emma.')">▶ 听完整句子</button><br><input id="gap1" class="input" style="margin-top:10px" placeholder="写下缺少的词"><br><button class="btn primary" onclick="gapCheck('gap1',`m'appelle`,'gf1')">检查</button><span id="gf1" class="feedback"></span></div>
+<div class="exercise"><p>2. 🔊 <b>Tu t’appelles ______ ?</b></p><button class="btn listen" onclick="say('Tu t’appelles comment ?')">▶ 听完整句子</button><br><input id="gap2" class="input" style="margin-top:10px" placeholder="写下缺少的词"><br><button class="btn primary" onclick="gapCheck('gap2','comment','gf2')">检查</button><span id="gf2" class="feedback"></span></div>
+<div class="exercise"><p>3. 🔊 <b>Elle ______ française.</b></p><button class="btn listen" onclick="say('Elle est française.')">▶ 听完整句子</button><br><input id="gap3" class="input" style="margin-top:10px" placeholder="写下缺少的词"><br><button class="btn primary" onclick="gapCheck('gap3','est','gf3')">检查</button><span id="gf3" class="feedback"></span></div></div>
+<div class="complete"><span>选听、短语听写、整句听写和补词都练过了吗？</span><button onclick="done('listenPage')">✓ 完成听力</button></div></section>
 
 <section class="page hidden" id="speakPage"><h2>🎙️ 开口说法语</h2><p class="lead">先听，再模仿，然后录下自己的声音回放。</p>
 <div class="speakhero"><div class="task"><b>① 介绍自己</b><br>Je m’appelle + 名字。 <button class="sound" onclick="say('Je m’appelle Emma.')">🔊 示例</button></div><div class="task"><b>② 问对方名字</b><br>Tu t’appelles comment ? <button class="sound" onclick="say('Tu t’appelles comment ?')">🔊 示例</button></div><div class="task"><b>③ 介绍他 / 她</b><br>Il s’appelle… / Elle s’appelle… <button class="sound" onclick="say('Elle s’appelle Emma.')">🔊 示例</button></div></div>
+<div class="section pink"><h3>🗣️ 听一句，说一句</h3><p class="note">不要只看文字。先点播放，听完以后尽量不看屏幕重复出来。</p><div class="mini-grid"><div class="mini"><strong>①</strong><span>先听，再说</span><br><button class="sound" onclick="say('Je m’appelle Elsa.')">🔊 听</button></div><div class="mini"><strong>②</strong><span>先听，再说</span><br><button class="sound" onclick="say('Tu t’appelles comment ?')">🔊 听</button></div><div class="mini"><strong>③</strong><span>先听，再说</span><br><button class="sound" onclick="say('Il s’appelle Lucas.')">🔊 听</button></div><div class="mini"><strong>④</strong><span>先听，再说</span><br><button class="sound" onclick="say('Elle s’appelle Emma.')">🔊 听</button></div><div class="mini"><strong>⑤</strong><span>先听，再说</span><br><button class="sound" onclick="say('Je suis Elsa.')">🔊 听</button></div><div class="mini"><strong>⑥</strong><span>先听，再说</span><br><button class="sound" onclick="say('Elle est française.')">🔊 听</button></div></div></div>
 <div class="recorder"><b>🎤 我的录音</b><p class="note">点击开始后允许浏览器使用麦克风。录完可以直接回放比较，录音不会上传到网站。</p><button class="btn record" id="rec">● 开始录音</button> <button class="btn stop" id="stop" disabled>■ 停止</button> <span id="rs" class="feedback"></span><div class="recordings" id="recordings"></div></div>
 <div class="complete"><span>三句话都开口练习后再标记完成。</span><button onclick="done('speakPage')">✓ 完成口语</button></div></section>
 
@@ -84,7 +89,23 @@ document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelect
 function say(t){if(!speechSynthesis){alert('浏览器不支持语音播放');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='fr-FR';u.rate=.76;let v=speechSynthesis.getVoices().find(x=>x.lang&&x.lang.toLowerCase().startsWith('fr'));if(v)u.voice=v;speechSynthesis.speak(u)}
 function radio(n,a,id){let x=document.querySelector(`input[name="${n}"]:checked`),f=document.getElementById(id);if(!x){f.textContent='请先选择';f.className='feedback bad';return}let ok=+x.value===a;f.textContent=ok?'✓ 正确！':'✗ 再想一想';f.className='feedback '+(ok?'good':'bad')}
 function norm(s){return s.toLowerCase().trim().replace(/[?.!,]/g,'').replace(/[’‘]/g,"'").replace(/\s+/g,' ')}
-function textCheck(){let ok=norm(dict.value)==="tu t'appelles comment";f2.textContent=ok?'✓ 听写正确！':"参考：Tu t’appelles comment ?";f2.className='feedback '+(ok?'good':'bad')}
+const shortDict=[
+  ["je","我"],["tu","你"],["il","他"],["elle","她"],["être","是（原形）"],
+  ["je suis","我是"],["tu es","你是"],["il est","他是"],["elle est","她是"],
+  ["je m’appelle","我叫……"],["tu t’appelles","你叫……"],["il s’appelle","他叫……"],["elle s’appelle","她叫……"]
+];
+const sentenceDict=[
+  "Je m’appelle Emma.","Tu t’appelles comment ?","Il s’appelle Lucas.","Elle s’appelle Emma.",
+  "Je suis Elsa.","Tu es Lucas.","Il est français.","Elle est française."
+];
+function esc(s){return s.replace(/'/g,"\\'")}
+function buildDict(){
+ dictShort.innerHTML=shortDict.map((x,i)=>`<div class="exercise"><p>${i+1}. 🎧 听写 <span class="note">（${x[1]}）</span></p><button class="btn listen" onclick="say('${esc(x[0])}')">▶ 播放</button><br><input id="sd${i}" class="input" style="margin-top:10px" placeholder="Écris ce que tu entends..."><br><button class="btn primary" onclick="dictCheck('sd${i}','${esc(x[0])}','sdf${i}')">检查</button><span id="sdf${i}" class="feedback"></span></div>`).join('');
+ dictSentence.innerHTML=sentenceDict.map((x,i)=>`<div class="exercise"><p>${i+1}. 🎧 听完整句子并写下来</p><button class="btn listen" onclick="say('${esc(x)}')">▶ 播放句子</button><br><input id="ss${i}" class="input" style="margin-top:10px" placeholder="Écris la phrase..."><br><button class="btn primary" onclick="dictCheck('ss${i}','${esc(x)}','ssf${i}')">检查听写</button><span id="ssf${i}" class="feedback"></span></div>`).join('');
+}
+function dictCheck(inputId,ans,feedId){let v=document.getElementById(inputId).value,f=document.getElementById(feedId),ok=norm(v)===norm(ans);f.textContent=ok?'✓ Très bien ! 听写正确！':'✗ 再听一遍试试';f.className='feedback '+(ok?'good':'bad')}
+function gapCheck(inputId,ans,feedId){let v=document.getElementById(inputId).value,f=document.getElementById(feedId),ok=norm(v)===norm(ans);f.textContent=ok?'✓ 正确！':'✗ 再听一遍';f.className='feedback '+(ok?'good':'bad')}
+buildDict();
 function translation(){let ok=norm(tr.value)==="tu t'appelles comment";wf3.textContent=ok?'✓ 正确！':"参考：Tu t’appelles comment ?";wf3.className='feedback '+(ok?'good':'bad')}
 function cnCheck(){let v=cn.value.trim(),ok=v.includes('他')&&v.includes('叫')&&v.toLowerCase().includes('lucas');wf4.textContent=ok?'✓ 很好！':'参考：他叫 Lucas。';wf4.className='feedback '+(ok?'good':'bad')}
 function done(p){if(!state.done.includes(p))state.done.push(p);localStorage.setItem(KEY,JSON.stringify(state));progress()}
