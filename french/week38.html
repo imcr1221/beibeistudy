@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Franska · Vecka 38</title>
+<style>
+:root{--bg:#fff9f4;--card:#fff;--ink:#24324a;--muted:#68758a;--accent:#7257d9;--soft:#f0ecff;--ok:#e8f7ee;--bad:#fff0f0}
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,#fff7ef,#f8f5ff);color:var(--ink)}
+.wrap{max-width:980px;margin:auto;padding:24px} .hero{background:linear-gradient(135deg,#6d5bd0,#9b7be8);color:white;border-radius:26px;padding:28px;box-shadow:0 12px 30px #735ad025}
+.hero h1{margin:0 0 8px;font-size:clamp(28px,5vw,46px)} .hero p{margin:0;opacity:.94}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0} button,.tab{border:0;border-radius:14px;padding:11px 15px;font-weight:700;cursor:pointer}
+.tab{background:white;box-shadow:0 5px 16px #0000000d} .tab.active{background:var(--accent);color:#fff}
+.section{display:none} .section.active{display:block} .card{background:var(--card);border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 8px 24px #25304a10}
+h2{margin-top:0} .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:11px 0;border-bottom:1px solid #eee} .pair:last-child{border:0}
+.fr{font-weight:800} .sv{color:var(--muted)} .q{padding:16px;border-radius:18px;background:#faf9ff;margin:12px 0}
+input{width:100%;padding:12px;border:2px solid #ddd7f5;border-radius:12px;font-size:16px;margin-top:9px} .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.speak{background:#efeaff;color:#4f3cb0} .check{background:var(--accent);color:white} .show{background:#eef2f7;color:#42506a}
+.feedback{margin-top:8px;font-weight:700} .good{color:#16824c} .wrong{color:#b04444} .dialogue{line-height:1.8;font-size:18px}
+.badge{display:inline-block;background:#ffffff2b;border-radius:999px;padding:6px 10px;margin-bottom:10px} .hint{color:var(--muted);font-size:14px}
+@media(max-width:620px){.pair{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero">
+<div class="badge">🇫🇷 Franska · Vecka 38</div>
+<h1>Hälsa, fråga hur någon mår och säga hej då 👋</h1>
+<p>Lyssna · skriv · tala · översätt från svenska till franska</p>
+</section>
+
+<nav class="tabs">
+<button class="tab active" data-id="learn">📚 Ord</button>
+<button class="tab" data-id="listen">🎧 Lyssna</button>
+<button class="tab" data-id="dict">✍️ Diktamen</button>
+<button class="tab" data-id="speak">🗣️ Tala</button>
+<button class="tab" data-id="translate">🇸🇪→🇫🇷 Översätt</button>
+<button class="tab" data-id="challenge">🏆 Utmaning</button>
+</nav>
+
+<section id="learn" class="section active">
+<div class="card"><h2>Veckans ord och uttryck</h2><p class="hint">Tryck på 🔊 för att höra franskan.</p><div id="wordList"></div></div>
+<div class="card"><h2>Mini-dialog</h2><div class="dialogue">
+<b>A:</b> Bonjour ! Ça va ?<br><b>B:</b> Oui, ça va bien, merci. Et toi ?<br><b>A:</b> Très bien, merci.<br><b>B:</b> Au revoir ! Bonne journée !<br><b>A:</b> Toi aussi. À bientôt !
+</div><button class="speak" onclick="say(`Bonjour ! Ça va ? Oui, ça va bien, merci. Et toi ? Très bien, merci. Au revoir ! Bonne journée ! Toi aussi. À bientôt !`)">🔊 Lyssna på dialogen</button></div>
+</section>
+
+<section id="listen" class="section">
+<div class="card"><h2>🎧 Lyssna och välj betydelsen</h2><p>Lyssna först. Försök att inte titta på ordlistan.</p><div id="listenQs"></div></div>
+</section>
+
+<section id="dict" class="section">
+<div class="card"><h2>✍️ Hör och skriv</h2><p>Tryck på 🔊. Skriv exakt det franska ordet eller uttrycket du hör.</p><div id="dictQs"></div></div>
+<div class="card"><h2>🎧 Hela meningar</h2><p>Lyssna flera gånger om du behöver.</p><div id="sentenceDict"></div></div>
+</section>
+
+<section id="speak" class="section">
+<div class="card"><h2>🗣️ Lyssna och säg efter</h2><p>Lyssna en gång, titta bort från texten och försök säga samma sak själv.</p><div id="speakQs"></div></div>
+<div class="card"><h2>🎭 Svara själv</h2>
+<div class="q"><b>1. Någon frågar: “Ça va ?”</b><p>Svara på franska att du mår bra och tacka.</p></div>
+<div class="q"><b>2. Du ska gå hem.</b><p>Säg “hej då”, “ha en bra dag” eller “vi ses snart” på franska.</p></div>
+</div>
+</section>
+
+<section id="translate" class="section">
+<div class="card"><h2>🇸🇪 → 🇫🇷 Skriv på franska</h2>
+<p><b>Alla veckans 14 ord och uttryck finns med.</b> Läs svenskan och skriv franskan själv.</p>
+<div id="translateQs"></div></div>
+</section>
+
+<section id="challenge" class="section">
+<div class="card"><h2>🏆 Vecka 38 · Slututmaning</h2>
+<div class="q"><b>1.</b> Skriv en kort dialog med minst fyra av veckans uttryck.<textarea id="free1" style="width:100%;min-height:110px;margin-top:10px;border:2px solid #ddd7f5;border-radius:12px;padding:12px"></textarea></div>
+<div class="q"><b>2.</b> Hur många olika sätt kan du säga hej eller hej då på med veckans ord?</div>
+</div>
+</section>
+</div>
+
+<script>
+const vocab=[{"fr": "Ça va ?", "sv": "Hur står det till? Läget? Hur mår du?"}, {"fr": "bonjour", "sv": "god dag"}, {"fr": "très bien", "sv": "mycket bra"}, {"fr": "merci", "sv": "tack"}, {"fr": "salut", "sv": "hej"}, {"fr": "oui", "sv": "ja"}, {"fr": "ça va bien", "sv": "jag mår bra, det är bra"}, {"fr": "au revoir", "sv": "hej då, adjö"}, {"fr": "à ce soir", "sv": "vi ses ikväll"}, {"fr": "d’accord", "sv": "ok"}, {"fr": "à bientôt", "sv": "vi ses snart"}, {"fr": "bonne journée", "sv": "ha en bra dag"}, {"fr": "ciao", "sv": "hej då"}, {"fr": "toi aussi", "sv": "du också"}];
+const normalize=s=>s.toLowerCase().trim().replace(/[?.!,]/g,"").replace(/’/g,"'").replace(/\s+/g," ");
+function say(t){ if(!('speechSynthesis' in window)) return alert('Tal stöds inte i denna webbläsare.'); speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.lang='fr-FR'; u.rate=.82; speechSynthesis.speak(u); }
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab,.section').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.id).classList.add('active')});
+
+document.getElementById('wordList').innerHTML=vocab.map(v=>`<div class="pair"><div class="fr">${v.fr} <button class="speak" onclick='say(${JSON.stringify(v.fr)})'>🔊</button></div><div class="sv">${v.sv}</div></div>`).join('');
+
+const listenSet=[vocab[0],vocab[2],vocab[6],vocab[7],vocab[8],vocab[10],vocab[11],vocab[13]];
+document.getElementById('listenQs').innerHTML=listenSet.map((v,i)=>{
+ const wrong=vocab[(i+4)%vocab.length].sv; const opts=[v.sv,wrong].sort(()=>i%2?1:-1);
+ return `<div class="q"><button class="speak" onclick='say(${JSON.stringify(v.fr)})'>🔊 Lyssna</button><div class="actions">${opts.map(o=>`<button onclick='this.parentElement.nextElementSibling.textContent=${JSON.stringify(o===v.sv?"✓ Rätt!":"Försök igen.")}'>${o}</button>`).join('')}</div><div class="feedback"></div></div>`;
+}).join('');
+
+const dictSet=[...vocab];
+document.getElementById('dictQs').innerHTML=dictSet.map((v,i)=>`<div class="q"><b>${i+1}.</b> <button class="speak" onclick='say(${JSON.stringify(v.fr)})'>🔊 Lyssna</button><input id="d${i}" autocomplete="off" placeholder="Skriv på franska"><div class="actions"><button class="check" onclick="check('d${i}',${JSON.stringify(v.fr)})">Kontrollera</button><button class="show" onclick="showAns('d${i}',${JSON.stringify(v.fr)})">Visa svar</button></div><div class="feedback"></div></div>`).join('');
+
+const sentences=["Bonjour ! Ça va ?","Oui, ça va bien, merci.","Au revoir ! À bientôt !","Bonne journée !","À ce soir !","Très bien, merci. Et toi ?"];
+document.getElementById('sentenceDict').innerHTML=sentences.map((s,i)=>`<div class="q"><button class="speak" onclick='say(${JSON.stringify(s)})'>🔊 Mening ${i+1}</button><input id="s${i}" placeholder="Skriv hela meningen"><button class="check" onclick="check('s${i}',${JSON.stringify(s)})">Kontrollera</button><div class="feedback"></div></div>`).join('');
+
+const speakSet=["Bonjour !","Ça va ?","Ça va bien, merci.","Et toi ?","Au revoir !","À bientôt !","Bonne journée !","Toi aussi."];
+document.getElementById('speakQs').innerHTML=speakSet.map((s,i)=>`<div class="q"><button class="speak" onclick='say(${JSON.stringify(s)})'>🔊 Lyssna</button> <b>${s}</b><p class="hint">Lyssna → titta bort → säg meningen själv.</p></div>`).join('');
+
+document.getElementById('translateQs').innerHTML=vocab.map((v,i)=>`<div class="q"><b>${i+1}. ${v.sv}</b><input id="t${i}" placeholder="Skriv på franska"><div class="actions"><button class="check" onclick="check('t${i}',${JSON.stringify(v.fr)})">Kontrollera</button><button class="show" onclick="showAns('t${i}',${JSON.stringify(v.fr)})">Visa svar</button></div><div class="feedback"></div></div>`).join('');
+
+function check(id,ans){
+ const el=document.getElementById(id), fb=el.parentElement.querySelector('.feedback');
+ if(normalize(el.value)===normalize(ans)){fb.textContent='✓ Rätt!';fb.className='feedback good'}else{fb.textContent='Försök igen.';fb.className='feedback wrong'}
+}
+function showAns(id,ans){const el=document.getElementById(id); el.value=ans; const fb=el.parentElement.querySelector('.feedback');fb.textContent='Svar visat.';fb.className='feedback'}
+</script>
+</body></html>
