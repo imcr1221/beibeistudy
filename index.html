@@ -15,7 +15,7 @@ a{text-decoration:none;color:inherit}.top{max-width:1180px;margin:auto;padding:2
 @media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.hero:after{display:none}}@media(max-width:530px){.grid{grid-template-columns:1fr}.cover{height:275px}.wrap{padding-left:16px;padding-right:16px}.top{padding-left:16px;padding-right:16px}.hero{padding:25px 22px}}
 </style></head>
 <body>
-<header class="top"><div class="logo">🌈 我的学习小天地</div><div class="week">Grade 6 · Week 40</div></header>
+<header class="top"><div class="logo">🌈 我的学习小天地</div><div class="week" id="currentWeek">Grade 6 · Week 42</div></header>
 <main class="wrap">
 <section class="hero"><small>MY LEARNING SPACE</small><h1>今天想学哪一科？</h1><p>选择一个科目，进入本周学习。<br>听一听、读一读、做练习，每天进步一点点。</p></section>
 <div class="heading"><h2>📚 我的科目</h2><p>七门课程 + 国家考试 · 每周学习 · 随时复习</p></div>
@@ -30,4 +30,19 @@ a{text-decoration:none;color:inherit}.top{max-width:1180px;margin:auto;padding:2
 <a class="subject np" href="nationellaprov/index.html"><div class="cover"><div class="np-art" role="img" aria-label="数学、瑞典语、英语考试">📐 📖 ✍️</div><div class="np-ribbon">NATIONELLA PROV · ÅK 6</div></div><div class="label"><div><strong>📝 Nationella prov</strong><small>六年级国家考试 · 数学 · 瑞典语 · 英语</small></div><span class="arrow">›</span></div></a>
 </div>
 <div class="info">💡 已增加 <b>Nationella prov · Åk 6</b> 国家考试入口，包含官方数学、瑞典语和英语材料。原来的七门科目及链接均保留。</div>
-</main><footer>🌱 Learn a little every day.</footer></body></html>
+</main><footer>🌱 Learn a little every day.</footer><script>
+// 根据瑞典当地日期计算 ISO 8601 周数：周一开始，跨年自动更新。
+(function () {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Stockholm', year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date());
+  const dateParts = Object.fromEntries(parts.map(p => [p.type, p.value]));
+  const d = new Date(Date.UTC(+dateParts.year, +dateParts.month - 1, +dateParts.day));
+  const weekday = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - weekday); // 当周周四决定 ISO 周所属年份
+  const isoYear = d.getUTCFullYear();
+  const first = new Date(Date.UTC(isoYear, 0, 1));
+  const week = Math.ceil((((d - first) / 86400000) + 1) / 7);
+  document.getElementById('currentWeek').textContent = 'Grade 6 · Week ' + week;
+})();
+</script></body></html>
