@@ -15,6 +15,15 @@
 .old{opacity:.66}.old .weekArt{background:linear-gradient(135deg,#9aa8c2,#bdc7d7)}.old .go{background:#aab5c8}.old:hover{transform:none}
 .tip{margin-top:22px;padding:16px 18px;border-radius:17px;background:linear-gradient(135deg,#e9f2ff,#fff0f3);color:#647594;font-size:13px;line-height:1.7}footer{text-align:center;color:#8996ad;font-size:12px;padding:0 0 25px}
 @media(max-width:650px){.hero{height:300px}.heroText{left:23px;right:23px}.summary{grid-template-columns:repeat(2,1fr)}.week{grid-template-columns:100px 1fr 45px}.weekArt .num{font-size:27px}.weekBody{padding:15px}.weekBody h3{font-size:17px}}
+
+/* 教材单元：与每周学习独立的视觉区域 */
+.unitSection{margin:28px 0 32px;padding:22px;border-radius:25px;background:linear-gradient(135deg,rgba(230,238,255,.94),rgba(246,234,255,.88));border:1px solid rgba(137,151,216,.18)}
+.unitSection .head{margin:0 0 15px}
+.unitCard{display:flex;align-items:center;gap:17px;padding:19px 21px;background:#fff;border-radius:19px;box-shadow:0 8px 24px rgba(71,79,143,.09);transition:transform .2s,box-shadow .2s}
+.unitCard:hover{transform:translateY(-2px);box-shadow:0 13px 28px rgba(71,79,143,.14)}
+.unitIcon{width:68px;height:68px;flex-shrink:0;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,#526cce,#8d77d6);color:#fff;font-size:29px}
+.unitInfo{flex:1;min-width:0}.unitInfo h3{margin:0 0 6px;font-size:20px}.unitInfo p{margin:0;color:#697a98;font-size:13px;line-height:1.7}.unitArrow{font-size:27px;color:#7d79ca}
+@media(max-width:650px){.unitSection{padding:15px}.unitCard{padding:15px;gap:12px}.unitIcon{width:51px;height:51px;font-size:24px}.unitInfo h3{font-size:17px}}
 </style></head>
 <body>
 <header class="top"><div class="brand">🇫🇷 Français · 法语</div><a class="back" href="../index.html">← 返回全部科目</a></header>
@@ -30,6 +39,13 @@
 <div class="stat"><b>📖 Lire</b><span>阅读</span></div>
 <div class="stat"><b>✍️ Écrire</b><span>写作</span></div>
 </div>
+<section class="unitSection" aria-label="教材单元学习">
+<div class="head"><div><h2>📚 教材单元学习</h2><p>按教材章节系统学习，听原声、读课文、做练习。</p></div></div>
+<a class="unitCard" href="unite1/index.html">
+<div class="unitIcon" aria-hidden="true">📖</div>
+<div class="unitInfo"><h3>Unité 1 · 第一单元</h3><p>教材第4–39页 · 法语原声 · 词汇语法 · 听力训练 · 综合复习</p><div class="tags"><span class="tag t1">📖 课文</span><span class="tag t2">🎧 原声</span><span class="tag t3">✍️ 练习</span></div></div><div class="unitArrow" aria-hidden="true">›</div>
+</a>
+</section>
 <div class="head"><div><h2>🗓️ 每周学习</h2><p>选择周次开始学习，也可以回来复习。</p></div><span class="current">CURRENT · W41</span></div>
 <a class="week" href="week41.html">
 <div class="weekArt"><div><small>SEMAINE</small><div class="num">41</div></div></div>
@@ -51,6 +67,7 @@
 <div class="weekArt"><div><small>SEMAINE</small><div class="num">37</div></div></div>
 <div class="weekBody"><h3>Bonjour！礼貌问候与家庭告别</h3><p>练习 madame、monsieur、papa、ma chérie，以及 Ça va bien ?、à ce soir 等表达，完成听说和默写练习。</p><div class="tags"><span class="tag t1">📖 学习</span><span class="tag t2">🎧 听力</span><span class="tag t3">✍️ 听写</span><span class="tag t4">🇸🇪→🇫🇷</span></div></div><div class="go">›</div>
 </a>
+
 <div class="tip">💡 <b>按周数倒序排列：</b>最新一周始终放在最上面。现在可以学习第41周，也可以复习第40、39、38、37周；以后增加新的一周时，继续放在最上面。</div>
 </main><footer>🇫🇷 Un peu de français chaque semaine.</footer>
 </body></html>
