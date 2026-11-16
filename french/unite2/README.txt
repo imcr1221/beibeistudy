@@ -1,0 +1,1 @@
+第二单元：将教材图片 60.jpg 至 73.jpg 放入 pages/；教材音频放入 audio/，并在 index.html 中登记 audioFiles。当前未附带原始教材照片或第二单元录音。
